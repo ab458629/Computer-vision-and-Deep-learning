@@ -4,7 +4,7 @@
 #### 2. Augmented Reality
 #### 3. Stereo Disparity Map
 #### 4. SIFT
-###### First, use Hamming distance to threshold the maches.\
+###### First, use Hamming distance to threshold the maches.
 ###### Then, Ransac is the most important idea to recorrect them.
  <img src = "https://github.com/ab458629/Computer-vision-and-Deep-learning/blob/main/Hw1/image/Q1~Q4.PNG" width = "500" alt="首頁"/> 
  
