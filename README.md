@@ -16,12 +16,18 @@
 
 
 ## Hw2
-#### 1. Background Subtraction                                       
-#### 2. Optical Flow						
+#### 1. Background Subtraction
+<img src = "https://github.com/ab458629/Computer-vision-and-Deep-learning/blob/main/Hw2/HW02_01.PNG" width = "500" alt="首頁"/> 
+
+#### 2. Optical Flow
 ###### 2.1 Preprocessing 
 ###### 2.2 Video tracking
-#### 3. Perspective Transform			
+#### 3. Perspective Transform
 #### 4. PCA    						
 ######	4.1 Image Reconstruction
 ######	4.2 Compute the reconstruction error	
+<img src = "https://github.com/ab458629/Computer-vision-and-Deep-learning/blob/main/Hw2/HW02_04.png" width = "500" alt="首頁"/> 
+
 #### 5. Dogs and Cats classification Using ResNet50
+<img src = "https://github.com/ab458629/Computer-vision-and-Deep-learning/blob/main/Hw2/HW02_05.png" width = "500" alt="首頁"/> 
+
