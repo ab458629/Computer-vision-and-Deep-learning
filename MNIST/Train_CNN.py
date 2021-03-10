@@ -67,8 +67,8 @@ class CNN:
 
         # 輸出結果之前使用 Dropout 函數避免過度配適
         with tf.name_scope('Dropout'):
-            keep_prob = tf.placeholder(tf.float32)
-            h_fc1_drop = tf.nn.dropout(h_fc1, keep_prob)
+            self.keep_prob = tf.placeholder(tf.float32)
+            h_fc1_drop = tf.nn.dropout(h_fc1, self.keep_prob)
 
         # 第四層是輸出層（10 個神經元），使用跟之前相同的 Softmax 函數輸出結果
         with tf.name_scope('ReadoutLayer'):
@@ -80,12 +80,14 @@ class CNN:
         with tf.name_scope('CrossEntropy'):
             cross_entropy = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(logits=y_conv, labels=y_))
             tf.summary.scalar("CrossEntropy", cross_entropy)
-        train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
+        self.train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
         correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
         with tf.name_scope('Accuracy'):
-            accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-            tf.summary.scalar("Accuracy", accuracy)
+            self.accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
+            tf.summary.scalar("Accuracy", self.accuracy)
 
+    def train(self):
+        print("Start Training......")
         # 初始化
         sess.run(tf.global_variables_initializer())
 
@@ -96,14 +98,14 @@ class CNN:
         for i in range(1000):
             batch = mnist.train.next_batch(50)
             if i%100 == 0:
-                train_accuracy = accuracy.eval(feed_dict = {x: batch[0], y_: batch[1], keep_prob: 1.0})
+                train_accuracy = self.accuracy.eval(feed_dict = {x: batch[0], y_: batch[1], self.keep_prob: 1.0})
                 print("step %d, training accuracy %g"%(i, train_accuracy))
-                summary = sess.run(merged, feed_dict = {x: batch[0], y_: batch[1], keep_prob: 1.0})
+                summary = sess.run(merged, feed_dict = {x: batch[0], y_: batch[1], self.keep_prob: 1.0})
                 writer.add_summary(summary, i)
                 writer.flush()
-            train_step.run(feed_dict={x: batch[0], y_: batch[1], keep_prob: 0.5})
+            self.train_step.run(feed_dict={x: batch[0], y_: batch[1], self.keep_prob: 0.5})
 
-        print("test accuracy %g"%accuracy.eval(feed_dict = {x: x_test, y_: y_test, keep_prob: 1.0}))
+        print("test accuracy %g"%self.accuracy.eval(feed_dict = {x: x_test, y_: y_test, self.keep_prob: 1.0}))
 
 
         saver = tf.train.Saver()
@@ -113,4 +115,5 @@ class CNN:
         sess.close()
 
 if __name__ == '__main__':
-    Train = CNN()
+    Network = CNN()
+    Network.train()
