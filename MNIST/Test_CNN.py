@@ -4,12 +4,10 @@ import numpy as np
 
 # 讀入 MNIST
 mnist = input_data.read_data_sets("MNIST_data/", one_hot = True)
-x_train = mnist.train.images
-y_train = mnist.train.labels
 x_test = mnist.test.images
 y_test = mnist.test.labels
-n_features = x_train.shape[1]
-n_labels = y_train.shape[1]
+n_features = 784
+n_labels = 10
 
 # 啟動 InteractiveSession
 sess = tf.InteractiveSession()
@@ -67,30 +65,21 @@ with tf.name_scope('ReadoutLayer'):
     b_fc2 = bias_variable([10])
     y_conv = tf.matmul(h_fc1_drop, W_fc2) + b_fc2
 
-# 訓練與模型評估
-with tf.name_scope('CrossEntropy'):
-    cross_entropy = tf.reduce_sum(tf.nn.softmax_cross_entropy_with_logits(logits=y_conv, labels=y_))
-    tf.summary.scalar("CrossEntropy", cross_entropy)
-train_step = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
-correct_prediction = tf.equal(tf.argmax(y_conv,1), tf.argmax(y_,1))
-with tf.name_scope('Accuracy'):
-    accuracy = tf.reduce_mean(tf.cast(correct_prediction, tf.float32))
-    tf.summary.scalar("Accuracy", accuracy)
-
 saver = tf.train.Saver()
 saver.restore(sess, "model_data/model.ckpt")
 
-import random
-i = random.randint(0, 100) 
-pred_index = np.argmax(sess.run(y_[i,:], feed_dict={x: x_test, y_: y_test}))
-print(pred_index)
-import matplotlib.pyplot as plt
-import numpy as np
-img = np.reshape(x_test[i, :], (28, 28))
-plt.matshow(img, cmap = plt.get_cmap('gray'))  #把第一張圖畫出來
-num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
-plt.title('Number : ' + num[pred_index])
-plt.show()
+if __name__ == '__main__':
+    import random
+    i = random.randint(0, 100) 
+    pred_index = np.argmax(sess.run(y_[i,:], feed_dict={x: x_test, y_: y_test}))
+    print(pred_index)
+    import matplotlib.pyplot as plt
+    import numpy as np
+    img = np.reshape(x_test[i, :], (28, 28))
+    plt.matshow(img, cmap = plt.get_cmap('gray_r'))  #把第一張圖畫出來
+    num = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+    plt.title('Number : ' + num[pred_index])
+    plt.show()
 
-# 關閉 session
-sess.close()
+    # 關閉 session
+    sess.close()
